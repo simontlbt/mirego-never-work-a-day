@@ -1,3 +1,5 @@
+@import "../common/constants.scss";
+
 @keyframes moment_appear {
   from {
     opacity: 0;
@@ -36,15 +38,17 @@
   width: 49%;
   margin-bottom: 20px;
   opacity: 0;
-  animation: moment_appear 300ms ease-in-out 0s 1 normal forwards;
+  animation: moment_appear $default-transition-duration ease-in-out 0s 1 normal
+    forwards;
   pointer-events: none;
-  border-radius: 5px;
+  border-radius: $default-radius;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  transition: box-shadow 300ms ease-in-out;
+  transition: box-shadow $default-transition-duration ease-in-out;
 
   .router.fade_out & {
     opacity: 1;
-    animation: moment_disappear 300ms ease-in-out 0s 1 normal forwards;
+    animation: moment_disappear $default-transition-duration ease-in-out 0s 1
+      normal forwards;
   }
 
   &:hover {
@@ -60,7 +64,7 @@
   padding-top: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 5px 5px 0 0;
+  border-radius: $default-radius $default-radius 0 0;
   background-clip: padding-box;
 }
 
@@ -72,7 +76,7 @@
   right: 0;
   background-position: center center;
   background-size: cover;
-  transition: transform 300ms ease-in-out;
+  transition: transform $default-transition-duration ease-in-out;
   &::after {
     content: "";
     display: block;
@@ -82,33 +86,34 @@
     bottom: 0;
     right: 0;
     opacity: 0;
-    transition: opacity 300ms ease-in-out;
+    transition: opacity $default-transition-duration ease-in-out;
     background-color: rgba(0, 0, 0, 0.4);
   }
-}
 
-.moments__moment:hover .moments__moment__picture__inner {
-  transform: scale(1.15);
-}
+  .moments__moment:hover & {
+    transform: scale(1.15);
+  }
 
-.moments__moment:hover .moments__moment__picture__inner::after {
-  opacity: 1;
+  .moments__moment:hover &::after {
+    opacity: 1;
+  }
 }
 
 .moments__moment__content {
   background-color: #ffffff;
   background-clip: padding-box;
-  border-radius: 0 0 5px 5px;
-  padding: 10px;
+  border-radius: 0 0 $default-radius $default-radius;
+  padding: $default-padding;
 }
 
 .moments__moment__header {
   display: flex;
   height: 72px;
 }
+
 .moments__moment__title {
   flex: 1;
-  padding-right: 10px;
+  padding-right: $default-padding;
   line-height: 24px;
   font-size: 18px;
   color: black;
@@ -141,20 +146,17 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  line-height: 16px;
-  font-size: 12px;
-  padding-right: 10px;
+  @include small-text();
+  padding-right: $default-padding;
 }
 
 .moments__moment__organization {
   flex: none;
   width: 30%;
-  line-height: 16px;
-  font-size: 12px;
-}
-
-.moments__moment__organization.moments__moment__organization--shown {
-  width: auto;
+  @include small-text();
+  &.moments__moment__organization--shown {
+    width: auto;
+  }
 }
 
 @media only screen and (max-width: 576px) {

@@ -6,7 +6,7 @@ import { useRouterState } from "../state/router";
 import { clsx } from "../utils/classnames";
 import { fetchImage } from "../utils/images";
 import { wait } from "../utils/wait";
-import "./moment.css";
+import "./moment.scss";
 import { ReactComponent as CaretDown } from "../assets/icons/caret-down.svg";
 
 function Comment({ comment }) {

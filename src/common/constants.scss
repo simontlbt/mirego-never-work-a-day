@@ -1,0 +1,10 @@
+$default-radius: 5px;
+$default-transition-duration: 300ms;
+$default-padding: 10px;
+
+// Text
+
+@mixin small-text {
+  line-height: 16px;
+  font-size: 12px;
+}

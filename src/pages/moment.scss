@@ -1,0 +1,224 @@
+@import "../common/constants.scss";
+
+.moment {
+  width: 100%;
+  border-radius: $default-radius;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.moment__picture {
+  position: relative;
+  overflow: hidden;
+  border-radius: $default-radius $default-radius 0 0;
+  background-clip: padding-box;
+  transition: padding $default-transition-duration ease-in-out;
+  &.moment__picture--shrunk {
+    padding-top: 50% !important;
+  }
+  &:hover {
+    padding-top: initial;
+  }
+}
+
+.moment__picture__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-position: center center;
+  background-size: cover;
+  transition: transform $default-transition-duration ease-in-out;
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity $default-transition-duration ease-in-out;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .moment__picture:hover & {
+    transform: scale(1.15);
+  }
+
+  .moment__picture:hover &::after {
+    opacity: 1;
+  }
+}
+
+.moment__picture__btn {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  border-radius: $default-radius;
+  border: 2px solid white;
+  opacity: 0;
+  transition: opacity $default-transition-duration ease-in-out;
+  z-index: 1;
+  padding: 5px $default-padding;
+  color: white;
+  line-height: 24px;
+  font-size: 16px;
+  .moment__picture:hover & {
+    opacity: 1;
+  }
+}
+
+.moment__content {
+  background-color: #ffffff;
+  padding: $default-padding;
+  padding-bottom: 20px;
+}
+
+.moment__header {
+  display: flex;
+}
+.moment__title {
+  flex: 1;
+  padding-right: $default-padding;
+  line-height: 32px;
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
+}
+
+.moment__author {
+  height: 96px;
+  width: 96px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+}
+
+.moment__comments {
+  background-color: #fafafa;
+  background-clip: padding-box;
+  border-radius: 0 0 $default-radius $default-radius;
+  transition: background-color $default-transition-duration ease-in-out;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+}
+
+.moment__comments__header {
+  padding: $default-padding;
+  display: flex;
+  align-items: center;
+}
+
+.moment__comments__title {
+  flex: 1;
+  @include small-text();
+  color: black;
+  padding-right: $default-padding;
+}
+
+.moment__comments__icon {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity $default-transition-duration $default-transition-duration
+      ease-in-out,
+    width 0s $default-transition-duration,
+    transform $default-transition-duration $default-transition-duration
+      ease-in-out;
+
+  .moment__comments--open & {
+    width: 0;
+    opacity: 0;
+    transition: opacity $default-transition-duration ease-in-out,
+      width 0s $default-transition-duration,
+      transform $default-transition-duration ease-in-out;
+    transform: translateY(-10px);
+  }
+
+  .moment__comments--open &.moment__comments__icon--opposite {
+    width: 24px;
+    opacity: 1;
+    transition: opacity $default-transition-duration
+        $default-transition-duration ease-in-out,
+      width 0s $default-transition-duration,
+      transform $default-transition-duration $default-transition-duration
+        ease-in-out;
+    transform: rotate(180deg) translateY(0);
+  }
+
+  &.moment__comments__icon--opposite {
+    width: 0;
+    opacity: 0;
+    transition: opacity $default-transition-duration 0s ease-in-out,
+      width 0s $default-transition-duration,
+      transform $default-transition-duration 0s ease-in-out;
+    transform: rotate(180deg) translateY(10px);
+  }
+
+  svg {
+    width: 100%;
+  }
+}
+
+.moment__comments__items {
+  overflow: hidden;
+  max-height: 0px;
+  transition: max-height $default-transition-duration
+    $default-transition-duration ease-in-out;
+  .moment__comments--open & {
+    transition: max-height $default-transition-duration 0ms ease-in-out;
+  }
+}
+
+.moment__comments__items__inner {
+  opacity: 0;
+  padding: $default-padding;
+  transition: opacity $default-transition-duration 0ms ease-in-out;
+  .moment__comments--open & {
+    opacity: 1;
+    transition: opacity $default-transition-duration
+      $default-transition-duration ease-in-out;
+  }
+}
+
+.moment__comments__item {
+  display: flex;
+  align-items: center;
+  padding: $default-padding 0;
+}
+
+.moment__comments__item__avatar {
+  flex: none;
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+}
+
+.moment__comments__item__content {
+  flex: 1;
+  padding-left: $default-padding;
+}
+
+.moment__comments__item__header {
+  @include small-text();
+  color: black;
+  span {
+    color: gray;
+  }
+}
+
+.moment__comments__item__message {
+  @include small-text();
+}
