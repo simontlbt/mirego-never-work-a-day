@@ -1,0 +1,236 @@
+.moment {
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.moment__picture {
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px 5px 0 0;
+  background-clip: padding-box;
+  transition: padding 300ms ease-in-out;
+}
+
+.moment__picture.moment__picture--shrunk {
+  padding-top: 50% !important;
+}
+
+.moment__picture:hover {
+  padding-top: initial;
+}
+
+.moment__picture__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-position: center center;
+  background-size: cover;
+  transition: transform 300ms ease-in-out;
+}
+
+/*
+.moment:hover
+  .moment__picture:not(.moment__picture--shrunk)
+  .moment__picture__inner::after {
+  opacity: 0;
+}
+
+.moment:hover
+  .moment__picture:not(.moment__picture--shrunk)
+  .moment__picture__inner {
+  transform: scale(1);
+}*/
+
+.moment__picture__inner::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.moment__picture__btn {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  border-radius: 5px;
+  border: 2px solid white;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  z-index: 1;
+  padding: 5px 10px;
+  color: white;
+  line-height: 24px;
+  font-size: 16px;
+}
+
+.moment__picture:hover .moment__picture__btn {
+  opacity: 1;
+}
+
+.moment__picture:hover .moment__picture__inner {
+  transform: scale(1.15);
+}
+
+.moment__picture:hover .moment__picture__inner::after {
+  opacity: 1;
+}
+
+.moment__content {
+  background-color: #ffffff;
+  padding: 10px;
+  padding-bottom: 20px;
+}
+
+.moment__header {
+  display: flex;
+}
+.moment__title {
+  flex: 1;
+  padding-right: 10px;
+  line-height: 32px;
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
+}
+
+.moment__author {
+  height: 96px;
+  width: 96px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+}
+
+.moment__comments {
+  background-color: #fafafa;
+  background-clip: padding-box;
+  border-radius: 0 0 5px 5px;
+  transition: background-color 300ms ease-in-out;
+}
+
+.moment__comments:hover {
+  background-color: #f3f3f3;
+}
+
+.moment__comments__header {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.moment__comments__title {
+  flex: 1;
+  line-height: 16px;
+  font-size: 12px;
+  color: black;
+  padding-right: 10px;
+}
+
+.moment__comments--open .moment__comments__icon {
+  width: 0;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out, width 0s 300ms,
+    transform 300ms ease-in-out;
+  transform: translateY(-10px);
+}
+
+.moment__comments--open
+  .moment__comments__icon.moment__comments__icon--opposite {
+  width: 24px;
+  opacity: 1;
+  transition: opacity 300ms 300ms ease-in-out, width 0s 300ms,
+    transform 300ms 300ms ease-in-out;
+  transform: rotate(180deg) translateY(0);
+}
+
+.moment__comments__icon {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 300ms 300ms ease-in-out, width 0s 300ms,
+    transform 300ms 300ms ease-in-out;
+}
+
+.moment__comments__icon svg {
+  width: 100%;
+}
+
+.moment__comments__icon--opposite {
+  width: 0;
+  opacity: 0;
+  transition: opacity 300ms 0s ease-in-out, width 0s 300ms,
+    transform 300ms 0s ease-in-out;
+  transform: rotate(180deg) translateY(10px);
+}
+
+.moment__comments__items {
+  overflow: hidden;
+  max-height: 0px;
+  transition: max-height 300ms 300ms ease-in-out;
+}
+
+.moment__comments--open .moment__comments__items {
+  transition: max-height 300ms 0ms ease-in-out;
+}
+
+.moment__comments__items__inner {
+  opacity: 0;
+  padding: 10px;
+  transition: opacity 300ms 0ms ease-in-out;
+}
+
+.moment__comments--open .moment__comments__items__inner {
+  opacity: 1;
+  transition: opacity 300ms 300ms ease-in-out;
+}
+
+.moment__comments__item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.moment__comments__item__avatar {
+  flex: none;
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+}
+
+.moment__comments__item__content {
+  flex: 1;
+  padding-left: 10px;
+}
+
+.moment__comments__item__header {
+  line-height: 16px;
+  font-size: 12px;
+  color: black;
+}
+
+.moment__comments__item__header span {
+  color: gray;
+}
+
+.moment__comments__item__message {
+  line-height: 24px;
+  font-size: 16px;
+}
