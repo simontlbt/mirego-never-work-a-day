@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import { Observer } from "../utils/pubsub/observer";
 
 export function useIsMounted() {
   const isMounted = useRef(true);
@@ -12,4 +13,15 @@ export function useIsMounted() {
   }, []);
 
   return isMounted_;
+}
+
+export function useObserveIsMounted() {
+  const isMountedObserver = Observer();
+  isMountedObserver.next(true);
+
+  useEffect(() => {
+    return () => isMountedObserver.next(false);
+  }, []);
+
+  return isMountedObserver;
 }

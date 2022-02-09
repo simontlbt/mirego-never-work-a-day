@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useHistory } from "./hooks/useHistory";
 import { useIsMounted } from "./hooks/useIsMounted";
 import { useRerender } from "./hooks/useRerender";
-import { useRouterState } from "./state/router";
+import { routerObserver } from "./state/router";
 import { clsx } from "./utils/classnames";
-import { wait } from "./utils/wait";
+import { wait } from "./utils/timing";
 
 const STATUSES = {
   SHOWN: "shown",
@@ -19,7 +19,6 @@ export function Router({
 }) {
   const history = useHistory();
 
-  const [_, setRouterState] = useRouterState();
   const rerender = useRerender();
   const isMounted = useIsMounted();
 
@@ -34,7 +33,7 @@ export function Router({
       history_.current = history;
       rerender();
     } else {
-      setRouterState({ isTransitioning: true });
+      routerObserver.next({ isTransitioning: true });
       setStatus(STATUSES.FADE_OUT);
 
       await wait(transitionDelay);
@@ -45,7 +44,7 @@ export function Router({
 
       history_.current = history;
 
-      setRouterState({ isTransitioning: false });
+      routerObserver.next({ isTransitioning: false });
 
       setStatus(STATUSES.SHOWN);
     }
@@ -62,7 +61,7 @@ export function Router({
       return;
     }
 
-    setRouterState({ isTransitioning: false });
+    routerObserver.next({ isTransitioning: false });
 
     setCanDisplay(true);
   }, []);

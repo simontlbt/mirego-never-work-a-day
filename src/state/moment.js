@@ -1,27 +1,38 @@
-import { useIsMounted } from "../hooks/useIsMounted";
+import {
+  RetryAsyncObserver,
+  RETRY_ASYNC_STATUSES,
+} from "../utils/pubsub/domain";
 import { getMoment } from "../utils/requests";
-import { State } from "./state";
+import { mergeWithRouter } from "./moments";
 
-const useMoment_ = State({});
+function getSpecificMomentObserver(id) {
+  return RetryAsyncObserver(() => getMoment(id));
+}
 
-export function useMoment() {
-  const [moment, setMoment] = useMoment_();
+export const specificMoments = {};
 
-  const isMounted = useIsMounted();
+export function initMoment(id) {
+  if (!specificMoments[id]) {
+    specificMoments[id] = getSpecificMomentObserver(id);
+  }
+}
 
-  const init = async (id) => {
-    if (moment[id]) {
-      return;
-    }
+export function specificMomentState(id) {
+  initMoment(id);
 
-    const moment_ = await getMoment(id);
+  const specificMomentObserver = specificMoments[id];
 
-    if (!isMounted()) {
-      return;
-    }
+  const observer = mergeWithRouter(specificMomentObserver);
 
-    setMoment((prev) => ({ ...prev, [id]: moment_ }));
-  };
+  function clean() {
+    specificMomentObserver.subscribe(({ status }, unsubscribe) => {
+      if (status !== RETRY_ASYNC_STATUSES.READY) {
+        specificMomentObserver.kill();
+        specificMoments[id] = undefined;
+      }
+      unsubscribe();
+    });
+  }
 
-  return [moment, { init }];
+  return { observer, clean };
 }

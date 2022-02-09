@@ -1,22 +1,21 @@
-import { useRef, useState } from "react";
-import { times } from "../utils/times";
-import { pushState } from "../hooks/useHistory";
-import "./moments.scss";
-import { useMoments } from "../state/moments";
+import { useState } from "react";
+import { times } from "../../utils/times";
+import { pushState } from "../../hooks/useHistory";
 import { useEffect } from "react/cjs/react.development";
-import { wait } from "@testing-library/user-event/dist/utils";
-import { useRouterState } from "../state/router";
-import { useIsMounted } from "../hooks/useIsMounted";
+import { useObserveIsMounted } from "../../hooks/useIsMounted";
 import Skeleton from "react-loading-skeleton";
-import { clsx } from "../utils/classnames";
-import { useMoment } from "../state/moment";
+import { clsx } from "../../utils/classnames";
+import { combine } from "../../utils/pubsub/operators";
+import { RETRY_ASYNC_STATUSES } from "../../utils/pubsub/domain";
+import { momentsState } from "../../state/moments";
+
+import "./index.scss";
+import { initMoment } from "../../state/moment";
 
 function Moment({ i, isShown, data }) {
-  const [_, { init }] = useMoment();
-
   const goToMoment = (id) => {
-    init(id);
-    pushState({ state: { preInit: true }, url: `/moment/${id}` });
+    initMoment(id);
+    pushState({ url: `/moment/${id}` });
   };
   return (
     <div
@@ -64,34 +63,28 @@ function Moment({ i, isShown, data }) {
 }
 
 export function Moments() {
-  const [{ moments }, { init }] = useMoments();
-  const [{ isTransitioning }] = useRouterState();
+  const isMountedObserver = useObserveIsMounted();
+  const [moments, setMoments] = useState(undefined);
 
-  const isMounted = useIsMounted();
+  useEffect(() => {
+    const { observer, clean } = momentsState();
 
-  const isLoading = useRef(false);
-  const [isShown, setIsShown] = useState(false);
+    observer
+      .pipe(combine(isMountedObserver))
+      .subscribe(([{ status, payload }, isMounted], unsubscribe) => {
+        if (!isMounted) {
+          unsubscribe();
+          clean();
+          return;
+        }
 
-  useEffect(async () => {
-    if (!moments) {
-      if (isLoading.current) {
-        return;
-      }
-      isLoading.current = true;
-      init();
-    } else {
-      if (!isTransitioning && isLoading.current) {
-        await wait(1000);
-      }
+        if (status == RETRY_ASYNC_STATUSES.READY) {
+          setMoments(payload);
+        }
+      });
+  }, []);
 
-      if (!isMounted()) {
-        return;
-      }
-
-      setIsShown(true);
-    }
-  }, [moments, isTransitioning]);
-
+  const isShown = !!moments;
   const moments_ = moments || times(10);
 
   return (
